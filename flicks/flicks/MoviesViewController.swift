@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import JGProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -15,13 +16,41 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     var movies : [NSDictionary]?
     
+    var refreshControl : UIRefreshControl!
+    
+    let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.setNeedsStatusBarAppearanceUpdate()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = self.view.backgroundColor
+        refreshControl.tintColor = UIColor.lightTextColor()
+        refreshControl.addTarget(self, action: "onRefresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
+        
         tableView.dataSource = self
         tableView.delegate  = self
+        
+        // loading begin (show)
+        
+        HUD.textLabel.text = "Loading"
+        HUD.showInView(self.view!)
+        
+        // HUD.dismissAfterDelay(3.0)
 
         // Do any additional setup after loading the view.
+        loadData()
+
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
+    func loadData() {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
@@ -36,13 +65,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
-                            NSLog("response: \(responseDictionary)")
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.tableView.reloadData()
+                            
+                            // loading success (remove)
+                            self.HUD.dismiss()
                     }
                 }
         });
         task.resume()
+    }
+    
+    func onRefresh() {
+        loadData()
+        self.refreshControl.endRefreshing()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -77,16 +113,5 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

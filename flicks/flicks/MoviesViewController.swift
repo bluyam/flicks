@@ -20,6 +20,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
     
+    let errorView = UILabel(frame: CGRect(x: 0, y: 20, width: 320, height: 40))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,10 +40,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         HUD.textLabel.text = "Loading"
         HUD.showInView(self.view!)
-        
-        // HUD.dismissAfterDelay(3.0)
 
         // Do any additional setup after loading the view.
+        
+        errorView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+        errorView.textColor = UIColor.whiteColor()
+        errorView.font = UIFont.systemFontOfSize(12)
+        errorView.textAlignment = NSTextAlignment.Center
         loadData()
 
     }
@@ -50,26 +55,55 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         return UIStatusBarStyle.LightContent
     }
     
+    func showNetworkErrorView(message: String) {
+        errorView.text = message
+        self.tableView.layer.frame.origin.y = 60
+        self.view!.addSubview(errorView)
+        self.HUD.dismiss()
+    }
+    
+    func hideNetworkErrorView() {
+        if (errorView.superview == self.view!) {
+            errorView.removeFromSuperview()
+        }
+        self.tableView.layer.frame.origin.y = 20
+        self.HUD.dismiss()
+    }
+    
     func loadData() {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
-        let request = NSURLRequest(URL: url!)
+        let request = NSURLRequest(URL: url!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringCacheData, timeoutInterval: 10.0)
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
             delegate:nil,
             delegateQueue:NSOperationQueue.mainQueue()
         )
-        
-        let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
+        let task = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
+                print("dataOrNil \(dataOrNil)")
+                print("response \(response)")
+                print("error \(error)")
+                if let actualError = error {
+                    print("there was an error")
+                    self.showNetworkErrorView(actualError.localizedDescription)
+                    return
+                }
+                
+                if (response is NSHTTPURLResponse) {
+                    let statusCode: Int = (response as! NSHTTPURLResponse).statusCode
+                    if statusCode != 200 {
+                        self.showNetworkErrorView("Network Error: \(statusCode)")
+                        return
+                    }
+                }
+                
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.tableView.reloadData()
-                            
-                            // loading success (remove)
-                            self.HUD.dismiss()
+                            self.hideNetworkErrorView()
                     }
                 }
         });
@@ -77,7 +111,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func onRefresh() {
-        loadData()
+        self.loadData()
         self.refreshControl.endRefreshing()
     }
     

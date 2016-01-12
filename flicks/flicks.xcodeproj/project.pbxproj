@@ -14,6 +14,7 @@
 		F57A20431C41C15E000FDBFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F57A20411C41C15E000FDBFA /* LaunchScreen.storyboard */; };
 		F57A204D1C41C25C000FDBFA /* MoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57A204C1C41C25C000FDBFA /* MoviesViewController.swift */; };
 		F57A20501C433AB8000FDBFA /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57A204F1C433AB7000FDBFA /* MovieCell.swift */; };
+		F57A20521C444F1A000FDBFA /* projector.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F57A20511C444F1A000FDBFA /* projector.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		F57A20441C41C15E000FDBFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F57A204C1C41C25C000FDBFA /* MoviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesViewController.swift; sourceTree = "<group>"; };
 		F57A204F1C433AB7000FDBFA /* MovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
+		F57A20511C444F1A000FDBFA /* projector.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = projector.jpg; path = ../../../../../Desktop/projector.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				F57A204E1C433A94000FDBFA /* Views */,
 				F57A204C1C41C25C000FDBFA /* MoviesViewController.swift */,
 				F57A20381C41C15E000FDBFA /* AppDelegate.swift */,
+				F57A20511C444F1A000FDBFA /* projector.jpg */,
 				F57A203C1C41C15E000FDBFA /* Main.storyboard */,
 				F57A203F1C41C15E000FDBFA /* Assets.xcassets */,
 				F57A20411C41C15E000FDBFA /* LaunchScreen.storyboard */,
@@ -160,6 +163,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F57A20521C444F1A000FDBFA /* projector.jpg in Resources */,
 				F57A20431C41C15E000FDBFA /* LaunchScreen.storyboard in Resources */,
 				F57A20401C41C15E000FDBFA /* Assets.xcassets in Resources */,
 				F57A203E1C41C15E000FDBFA /* Main.storyboard in Resources */,

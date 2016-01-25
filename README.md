@@ -35,7 +35,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Challenges: Dealing with Networking Errors (still need to improve), and formatting navigation controller shadow. I'll make more changes soon!
 
 ## License
 

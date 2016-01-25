@@ -10,9 +10,11 @@ import UIKit
 import AFNetworking
 import JGProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    @IBOutlet var tableView: UITableView!
+    let defaults = NSUserDefaults.standardUserDefaults();
+    
+    @IBOutlet var collectionView: UICollectionView!
     
     var movies : [NSDictionary]?
     
@@ -31,10 +33,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         refreshControl.backgroundColor = self.view.backgroundColor
         refreshControl.tintColor = UIColor.lightTextColor()
         refreshControl.addTarget(self, action: "onRefresh", forControlEvents: UIControlEvents.ValueChanged)
-        tableView.insertSubview(refreshControl, atIndex: 0)
+        collectionView.insertSubview(refreshControl, atIndex: 0)
         
-        tableView.dataSource = self
-        tableView.delegate  = self
+        collectionView.dataSource = self
+        collectionView.delegate  = self
         
         // loading begin (show)
         
@@ -57,7 +59,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func showNetworkErrorView(message: String) {
         errorView.text = message
-        self.tableView.layer.frame.origin.y = 60
+        self.collectionView.layer.frame.origin.y = 60
         self.view!.addSubview(errorView)
         self.HUD.dismiss()
     }
@@ -66,7 +68,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         if (errorView.superview == self.view!) {
             errorView.removeFromSuperview()
         }
-        self.tableView.layer.frame.origin.y = 20
+        self.collectionView.layer.frame.origin.y = 20
         self.HUD.dismiss()
     }
     
@@ -81,9 +83,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         )
         let task = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                print("dataOrNil \(dataOrNil)")
-                print("response \(response)")
-                print("error \(error)")
+                // print("dataOrNil \(dataOrNil)")
+                // print("response \(response)")
+                // print("error \(error)")
                 if let actualError = error {
                     print("there was an error")
                     self.showNetworkErrorView(actualError.localizedDescription)
@@ -102,7 +104,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
                             self.movies = responseDictionary["results"] as? [NSDictionary]
-                            self.tableView.reloadData()
+                            self.collectionView.reloadData()
                             self.hideNetworkErrorView()
                     }
                 }
@@ -115,7 +117,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.refreshControl.endRefreshing()
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let movies = movies {
             return movies.count
         }
@@ -124,23 +126,27 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         
-        let movie = movies?[indexPath.row]
+        let movie = movies?[indexPath.item]
         let title = movie!["title"] as! String
-        let overview = movie!["overview"] as! String
         let posterPath = movie!["poster_path"] as! String
         
         let baseImageURL = "http://image.tmdb.org/t/p/w500"
         
         let imageURL = NSURL(string: baseImageURL + posterPath)
         
-        cell.titleLabel.text = title
-        cell.overviewLabel.text = overview
+        cell.movieTitleLabel.text = title
         cell.posterImageView.setImageWithURL(imageURL!)
         
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let movieAsNSData = NSKeyedArchiver.archivedDataWithRootObject(movies![indexPath.row])
+        defaults.setObject(movieAsNSData, forKey: "currentMovie")
+        defaults.synchronize()
     }
 
     override func didReceiveMemoryWarning() {

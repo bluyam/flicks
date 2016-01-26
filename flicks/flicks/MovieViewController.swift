@@ -10,25 +10,42 @@ import UIKit
 
 class MovieViewController: UIViewController {
     
+    var movie: NSDictionary!
+    
     let defaults = NSUserDefaults.standardUserDefaults()
     
     @IBOutlet var posterImageView: UIImageView!
-    
     @IBOutlet var titleLabel: UILabel!
-    
     @IBOutlet var ratingLabel: UILabel!
-
     @IBOutlet var voteCountLabel: UILabel!
-
     @IBOutlet var overviewTextView: UITextView!
-    
     @IBOutlet var dateLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
         // Do any additional setup after loading the view.
+        
+        let title = movie!["title"] as! String
+        let overview = movie!["overview"] as! String
+        
+        let baseImageURL = "http://image.tmdb.org/t/p/w500"
+        
+        if let posterPath = movie!["poster_path"] as? String {
+            let imageURL = NSURL(string: baseImageURL + posterPath)
+            posterImageView.setImageWithURL(imageURL!)
+        }
+        
+        let date = numToWordDate(movie!["release_date"] as! String)
+        let rating = movie!["vote_average"] as! NSNumber
+        let voteCount = movie!["vote_count"] as! NSNumber
+        
+        
+        titleLabel.text = title
+        dateLabel.text = date
+        overviewTextView.text = overview
+
+        ratingLabel.text = "\(rating)"
+        voteCountLabel.text = "\(voteCount) Voters"
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,29 +71,4 @@ class MovieViewController: UIViewController {
         dateFormatter.dateFormat = "MMM dd, yyyy"
         return dateFormatter.stringFromDate(orignalDate)
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        
-        super.viewWillAppear(animated)
-        let movieData = defaults.objectForKey("currentMovie") as! NSData
-        let movie = NSKeyedUnarchiver.unarchiveObjectWithData(movieData) as? NSDictionary
-        
-        let title = movie!["title"] as! String
-        let overview = movie!["overview"] as! String
-        let posterPath = movie!["poster_path"] as! String
-        let date = numToWordDate(movie!["release_date"] as! String)
-        let rating = movie!["vote_average"] as! NSNumber
-        let voteCount = movie!["vote_count"] as! NSNumber
-        let baseImageURL = "http://image.tmdb.org/t/p/w500"
-        let imageURL = NSURL(string: baseImageURL + posterPath)
-        
-        titleLabel.text = title
-        dateLabel.text = date
-        overviewTextView.text = overview
-        posterImageView.setImageWithURL(imageURL!)
-        ratingLabel.text = "\(rating)"
-        voteCountLabel.text = "\(voteCount) Voters"
-        
-    }
-
 }

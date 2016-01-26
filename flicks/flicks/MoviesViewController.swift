@@ -22,7 +22,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
     
-    let errorView = UILabel(frame: CGRect(x: 0, y: 20, width: 320, height: 40))
+    // let errorView = UILabel(frame: CGRect(x: 0, y: 20, width: 320, height: 40))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,10 +45,10 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
 
         // Do any additional setup after loading the view.
         
-        errorView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+        /*errorView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
         errorView.textColor = UIColor.whiteColor()
         errorView.font = UIFont.systemFontOfSize(12)
-        errorView.textAlignment = NSTextAlignment.Center
+        errorView.textAlignment = NSTextAlignment.Center*/
         loadData()
 
     }
@@ -58,17 +58,17 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func showNetworkErrorView(message: String) {
-        errorView.text = message
-        self.collectionView.layer.frame.origin.y = 60
-        self.view!.addSubview(errorView)
+//        errorView.text = message
+//        self.collectionView.layer.frame.origin.y = 60
+//        self.view!.addSubview(errorView)
         self.HUD.dismiss()
     }
     
     func hideNetworkErrorView() {
-        if (errorView.superview == self.view!) {
-            errorView.removeFromSuperview()
-        }
-        self.collectionView.layer.frame.origin.y = 20
+//        if (errorView.superview == self.view!) {
+//            errorView.removeFromSuperview()
+//        }
+//        self.collectionView.layer.frame.origin.y = 20
         self.HUD.dismiss()
     }
     
@@ -131,14 +131,14 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         let movie = movies?[indexPath.item]
         let title = movie!["title"] as! String
-        let posterPath = movie!["poster_path"] as! String
+        cell.movieTitleLabel.text = title
         
         let baseImageURL = "http://image.tmdb.org/t/p/w500"
         
-        let imageURL = NSURL(string: baseImageURL + posterPath)
-        
-        cell.movieTitleLabel.text = title
-        cell.posterImageView.setImageWithURL(imageURL!)
+        if let posterPath = movie!["poster_path"] as? String {
+            let imageURL = NSURL(string: baseImageURL + posterPath)
+            cell.posterImageView.setImageWithURL(imageURL!)
+        }
         
         return cell
     }
@@ -152,6 +152,15 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let cell = sender as! UICollectionViewCell
+        let indexPath = collectionView.indexPathForCell(cell)
+        let movie = movies![indexPath!.item]
+        
+        let movieViewController = segue.destinationViewController as! MovieViewController
+        movieViewController.movie = movie
     }
 
 }

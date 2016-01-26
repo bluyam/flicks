@@ -18,21 +18,21 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ni2-a3-q3Z">
-                                    <size key="itemSize" width="94" height="137"/>
+                                    <size key="itemSize" width="147" height="214"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="8" minY="5" maxX="8" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MovieCell" id="AsZ-5o-DAZ" customClass="MovieCell" customModule="flicks" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="69" width="94" height="137"/>
+                                        <rect key="frame" x="8" y="64" width="147" height="214"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="94" height="137"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="147" height="214"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="o5R-S9-UwG">
-                                                    <rect key="frame" x="0.0" y="0.0" width="94" height="137"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="147" height="214"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" id="0UH-cm-jEc">
@@ -108,10 +108,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" id="xv1-2w-uHS">
-                                <rect key="frame" x="9" y="285" width="301" height="274"/>
+                                <rect key="frame" x="10" y="285" width="301" height="274"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.047058823530000002" green="0.043137254899999998" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -124,7 +124,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="dateLabel" destination="N8S-f7-XjM" id="fRK-5i-ZKb"/>
-                        <outlet property="overviewTextView" destination="xv1-2w-uHS" id="jd6-eX-Uv7"/>
+                        <outlet property="overviewTextView" destination="xv1-2w-uHS" id="9JC-Tw-fcP"/>
                         <outlet property="posterImageView" destination="4h6-0C-Ign" id="a3u-LX-PGB"/>
                         <outlet property="ratingLabel" destination="KYE-Nd-lp6" id="Vdp-Ky-YVJ"/>
                         <outlet property="titleLabel" destination="qw4-NK-wom" id="jt4-mk-Z8B"/>

@@ -16,7 +16,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        self.window!.backgroundColor = UIColor(patternImage: UIImage(named: "projector.jpg")!)
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let nowPlayingNavigationController =  storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
+        let nowPlayingViewController = nowPlayingNavigationController.topViewController as! MoviesViewController
+        nowPlayingViewController.endpoint = "now_playing"
+        
+        let topMoviesNavigationController =  storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
+        let topMoviesViewController = topMoviesNavigationController.topViewController as! MoviesViewController
+        topMoviesViewController.endpoint = "top_rated"
+        nowPlayingNavigationController.tabBarItem.title = "Now Playing"
+        nowPlayingNavigationController.tabBarItem.image = UIImage(named: "now_playing")
+        
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [nowPlayingNavigationController, topMoviesNavigationController]
+        topMoviesNavigationController.tabBarItem.title = "Top Rated"
+        topMoviesNavigationController.tabBarItem.image = UIImage(named: "top_rated")
+        
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
+        
+        // window?.backgroundColor = UIColor(patternImage: UIImage(named: "projector")!)
+        
         return true
     }
 

@@ -5,6 +5,27 @@
 //  Created by Kyle Wilson on 1/9/16.
 //  Copyright © 2016 Bluyam Inc. All rights reserved.
 //
+//  TODO: Make as useful as possible
+//
+//  Required: 
+//  Week 1 Stuff (Refresh, load image with afnetworking, Loading state when pulling data) [x]
+//  View Movie Details by Tapping Single Cell [x]
+//  Tab with Now Playing and Top Rated []
+//  Customize Cell Selection Effect []
+//
+//  Desired:
+//  Play trailer view
+//  Display box office price, actors, rating, runtime in collection
+//  Get tickets
+//  Add to 'my movies'
+//  Display reviews (rotten tomatoes, imdb, etc)
+//  Theatres tab
+//  Click on icon to view Trailer
+//  Disliked and Liked Movies
+//  Watch on Netflix link
+//  My Movies Tab
+//  Tinder style movie match
+//  Facebook Integration (Your friends like this movie)
 
 import UIKit
 import AFNetworking
@@ -18,9 +39,11 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     var movies : [NSDictionary]?
     
+    var endpoint : String!
+    
     var refreshControl : UIRefreshControl!
     
-    let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
+    let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Light)
     
     // let errorView = UILabel(frame: CGRect(x: 0, y: 20, width: 320, height: 40))
     
@@ -74,8 +97,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func loadData() {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
-        let request = NSURLRequest(URL: url!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringCacheData, timeoutInterval: 10.0)
+        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
+        let request = NSURLRequest(URL: url!)
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
             delegate:nil,
@@ -83,12 +106,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         )
         let task = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                // print("dataOrNil \(dataOrNil)")
-                // print("response \(response)")
-                // print("error \(error)")
-                if let actualError = error {
+                if let error = error {
                     print("there was an error")
-                    self.showNetworkErrorView(actualError.localizedDescription)
+                    self.showNetworkErrorView(error.localizedDescription)
                     return
                 }
                 
@@ -106,7 +126,12 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.collectionView.reloadData()
                             self.hideNetworkErrorView()
+                            self.refreshControl.endRefreshing()
                     }
+                }
+                
+                else {
+                    print ("A networking error occurred.")
                 }
         });
         task.resume()
@@ -114,7 +139,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func onRefresh() {
         self.loadData()
-        self.refreshControl.endRefreshing()
+
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

@@ -32,7 +32,22 @@ class MovieViewController: UIViewController {
         
         if let posterPath = movie!["poster_path"] as? String {
             let imageURL = NSURL(string: baseImageURL + posterPath)
-            posterImageView.setImageWithURL(imageURL!)
+            posterImageView.setImageWithURLRequest(NSURLRequest(URL: imageURL!), placeholderImage: nil, success: { (imageRequest, imageResponse, image) -> Void in
+                if imageResponse != nil {
+                    self.posterImageView.alpha = 0
+                    self.posterImageView.image = image
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        self.posterImageView.alpha = 1
+                    })
+                }
+                else {
+                    // default behavior
+                    
+                    
+                    self.posterImageView.image = image
+                }
+                }, failure: { (imageRequest, imageResponse, imageError) -> Void in
+            })
         }
         
         let date = numToWordDate(movie!["release_date"] as! String)

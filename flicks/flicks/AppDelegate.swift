@@ -29,10 +29,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
         nowPlayingNavigationController.tabBarItem.image = UIImage(named: "now_playing")
         
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [nowPlayingNavigationController, topMoviesNavigationController]
         topMoviesNavigationController.tabBarItem.title = "Top Rated"
         topMoviesNavigationController.tabBarItem.image = UIImage(named: "top_rated")
+        
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [nowPlayingNavigationController, topMoviesNavigationController]
+
+        // tabBarController.tabBar.backgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 0, alpha: 1)
+        // tabBarController.tabBar.tintColor = UIColor(colorLiteralRed: 1, green: 1, blue: 0, alpha: 1)
         
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()

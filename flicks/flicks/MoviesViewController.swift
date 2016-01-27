@@ -10,7 +10,7 @@
 //  Required: 
 //  Week 1 Stuff (Refresh, load image with afnetworking, Loading state when pulling data) [x]
 //  View Movie Details by Tapping Single Cell [x]
-//  Tab with Now Playing and Top Rated []
+//  Tab with Now Playing and Top Rated [x]
 //  Customize Cell Selection Effect []
 //
 //  Desired:
@@ -162,16 +162,29 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         if let posterPath = movie!["poster_path"] as? String {
             let imageURL = NSURL(string: baseImageURL + posterPath)
-            cell.posterImageView.setImageWithURL(imageURL!)
+            cell.posterImageView.setImageWithURLRequest(NSURLRequest(URL: imageURL!), placeholderImage: nil, success: { (imageRequest, imageResponse, image) -> Void in
+                if imageResponse != nil {
+                    cell.posterImageView.alpha = 0
+                    cell.posterImageView.image = image
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        cell.posterImageView.alpha = 1
+                    })
+                }
+                else {
+                    // default behavior
+                    cell.posterImageView.image = image
+                }
+                }, failure: { (imageRequest, imageResponse, imageError) -> Void in
+            })
         }
         
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let movieAsNSData = NSKeyedArchiver.archivedDataWithRootObject(movies![indexPath.row])
-        defaults.setObject(movieAsNSData, forKey: "currentMovie")
-        defaults.synchronize()
+        // let movieAsNSData = NSKeyedArchiver.archivedDataWithRootObject(movies![indexPath.row])
+        // defaults.setObject(movieAsNSData, forKey: "currentMovie")
+        // defaults.synchronize()
     }
 
     override func didReceiveMemoryWarning() {

@@ -63,7 +63,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         // loading begin (show)
         HUD.textLabel.text = "Loading"
-        HUD.indicatorView = JGProgressHUDRingIndicatorView()
         HUD.showInView(self.view!)
 
         // Do any additional setup after loading the view.
@@ -76,15 +75,11 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func showNetworkErrorView(message: String) {
-        self.HUD.indicatorView = JGProgressHUDImageIndicatorView(image: UIImage(named: "success"))
-        self.HUD.textLabel.text = "Success"
-        self.HUD.dismissAfterDelay(1.0)
+        self.HUD.dismiss()
     }
     
     func hideNetworkErrorView() {
-        self.HUD.indicatorView = JGProgressHUDImageIndicatorView(image: UIImage(named: "success"))
-        self.HUD.textLabel.text = "Success"
-        self.HUD.dismissAfterDelay(1.0)
+        self.HUD.dismiss()
     }
     
     func loadData() {
@@ -98,20 +93,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         )
         let task = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                if let error = error {
-                    print("there was an error")
-                    self.showNetworkErrorView(error.localizedDescription)
-                    return
-                }
-                
-                if (response is NSHTTPURLResponse) {
-                    let statusCode: Int = (response as! NSHTTPURLResponse).statusCode
-                    if statusCode != 200 {
-                        self.showNetworkErrorView("Network Error: \(statusCode)")
-                        return
-                    }
-                }
-                
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
@@ -121,7 +102,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                             self.refreshControl.endRefreshing()
                     }
                 }
-                
                 else {
                     print ("A networking error occurred.")
                 }
@@ -130,8 +110,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func onRefresh() {
-        self.HUD.textLabel.text = "Loading"
-        self.HUD.indicatorView = JGProgressHUDRingIndicatorView()
+        self.HUD.textLabel.text = "Refreshing"
+        self.HUD.indicatorView = JGProgressHUDIndicatorView()
         self.HUD.showInView(self.view)
         self.loadData()
 

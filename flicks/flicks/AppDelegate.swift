@@ -22,26 +22,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let nowPlayingNavigationController =  storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let nowPlayingViewController = nowPlayingNavigationController.topViewController as! MoviesViewController
         nowPlayingViewController.endpoint = "now_playing"
+        nowPlayingNavigationController.tabBarItem.title = "Now Playing"
+        nowPlayingNavigationController.tabBarItem.image = UIImage(named: "now_playing")
         
         let topMoviesNavigationController =  storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let topMoviesViewController = topMoviesNavigationController.topViewController as! MoviesViewController
         topMoviesViewController.endpoint = "top_rated"
-        nowPlayingNavigationController.tabBarItem.title = "Now Playing"
-        nowPlayingNavigationController.tabBarItem.image = UIImage(named: "now_playing")
-        
         topMoviesNavigationController.tabBarItem.title = "Top Rated"
         topMoviesNavigationController.tabBarItem.image = UIImage(named: "top_rated")
         
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [nowPlayingNavigationController, topMoviesNavigationController]
-
-        // tabBarController.tabBar.backgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 0, alpha: 1)
-        // tabBarController.tabBar.tintColor = UIColor(colorLiteralRed: 1, green: 1, blue: 0, alpha: 1)
+        let upcomingNavigationController =  storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
+        let upcomingViewController = upcomingNavigationController.topViewController as! MoviesViewController
+        upcomingViewController.endpoint = "upcoming"
+        upcomingNavigationController.tabBarItem.title = "Upcoming"
+        upcomingNavigationController.tabBarItem.image = UIImage(named: "upcoming")
         
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [nowPlayingNavigationController, topMoviesNavigationController, upcomingNavigationController]
+
+        tabBarController.tabBar.barTintColor = UIColor.blackColor()
+        tabBarController.tabBar.tintColor = UIColor.whiteColor()
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
-        // window?.backgroundColor = UIColor(patternImage: UIImage(named: "projector")!)
+        window?.backgroundColor = UIColor(patternImage: UIImage(named: "projector")!)
         
         return true
     }

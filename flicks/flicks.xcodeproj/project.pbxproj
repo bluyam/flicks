@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		671DB329D86B0059121BB186 /* Pods_flicks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3C016EB66D9C3249BC0B56A /* Pods_flicks.framework */; };
+		F579B6A61C59575200C0DEEB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F579B6A51C59575200C0DEEB /* Default-568h@2x.png */; };
 		F57A20391C41C15E000FDBFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57A20381C41C15E000FDBFA /* AppDelegate.swift */; };
 		F57A203E1C41C15E000FDBFA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F57A203C1C41C15E000FDBFA /* Main.storyboard */; };
 		F57A20401C41C15E000FDBFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F57A203F1C41C15E000FDBFA /* Assets.xcassets */; };
@@ -21,6 +22,7 @@
 		8F0DEC8816E8E15388E23D9E /* Pods-flicks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-flicks.debug.xcconfig"; path = "Pods/Target Support Files/Pods-flicks/Pods-flicks.debug.xcconfig"; sourceTree = "<group>"; };
 		C3C016EB66D9C3249BC0B56A /* Pods_flicks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_flicks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA9159C8488B5A9C4AF7189E /* Pods-flicks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-flicks.release.xcconfig"; path = "Pods/Target Support Files/Pods-flicks/Pods-flicks.release.xcconfig"; sourceTree = "<group>"; };
+		F579B6A51C59575200C0DEEB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F57A20351C41C15D000FDBFA /* flicks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = flicks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F57A20381C41C15E000FDBFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F57A203D1C41C15E000FDBFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 		F57A202C1C41C15D000FDBFA = {
 			isa = PBXGroup;
 			children = (
+				F579B6A51C59575200C0DEEB /* Default-568h@2x.png */,
 				F57A20371C41C15E000FDBFA /* flicks */,
 				F57A20361C41C15D000FDBFA /* Products */,
 				3C7EBE0ADAE4BF139E56974E /* Pods */,
@@ -164,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F57A20431C41C15E000FDBFA /* LaunchScreen.storyboard in Resources */,
+				F579B6A61C59575200C0DEEB /* Default-568h@2x.png in Resources */,
 				F57A20401C41C15E000FDBFA /* Assets.xcassets in Resources */,
 				F57A203E1C41C15E000FDBFA /* Main.storyboard in Resources */,
 			);

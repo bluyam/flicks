@@ -14,4 +14,9 @@ class MovieCell: UICollectionViewCell {
 
     @IBOutlet var movieTitleLabel: UILabel!
     
+    @IBOutlet var yearLabel: UILabel!
+    
+    @IBOutlet var ratingLabel: UILabel!
+    
+    
 }

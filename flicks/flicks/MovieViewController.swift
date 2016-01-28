@@ -20,6 +20,7 @@ class MovieViewController: UIViewController {
     @IBOutlet var voteCountLabel: UILabel!
     @IBOutlet var overviewTextView: UITextView!
     @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var backdropImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,12 +55,34 @@ class MovieViewController: UIViewController {
         let rating = movie!["vote_average"] as! NSNumber
         let voteCount = movie!["vote_count"] as! NSNumber
         
+        if let backdropPath = movie!["backdrop_path"] as? String {
+            let imageURL = NSURL(string: baseImageURL + backdropPath)
+            backdropImageView.setImageWithURLRequest(NSURLRequest(URL: imageURL!), placeholderImage: nil, success: { (imageRequest, imageResponse, image) -> Void in
+                if imageResponse != nil {
+                    self.backdropImageView.alpha = 0
+                    self.backdropImageView.image = image
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        self.backdropImageView.alpha = 1
+                    })
+                }
+                else {
+                    // default behavior
+                    
+                    
+                    self.backdropImageView.image = image
+                }
+                }, failure: { (imageRequest, imageResponse, imageError) -> Void in
+            })
+        }
+        
+        // 
         
         titleLabel.text = title
         dateLabel.text = date
         overviewTextView.text = overview
-
-        ratingLabel.text = "\(rating)"
+        
+        let ratingDouble = rating.doubleValue
+        ratingLabel.text = String(format: "%.1f", ratingDouble)
         voteCountLabel.text = "\(voteCount) Voters"
     }
 

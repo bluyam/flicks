@@ -1,0 +1,6 @@
+framework module GRKGradientView {
+  umbrella header "GRKGradientView-umbrella.h"
+
+  export *
+  module * { export * }
+}

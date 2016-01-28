@@ -14,24 +14,23 @@
 //  Customize Cell Selection Effect []
 //
 //  Desired:
-//  Play trailer view
-//  Display box office price, actors, rating, runtime in collection
-//  Get tickets
-//  Add to 'my movies'
-//  Display reviews (rotten tomatoes, imdb, etc)
-//  Theatres tab
+//  Play trailer view [can do]
+//  Display box office price, actors, rating, runtime in collection []
+//  Get tickets []
+//  Add to 'my movies' [can do]
+//  Display reviews (rotten tomatoes, imdb, etc) [can do]
+//  Theatres tab []
 //  Click on icon to view Trailer
 //  Disliked and Liked Movies
 //  Watch on Netflix link
-//  My Movies Tab
-//  Tinder style movie match
+//  My Movies Tab []
 //  Facebook Integration (Your friends like this movie)
 
 import UIKit
 import AFNetworking
 import JGProgressHUD
 
-class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchResultsUpdating {
     
     let defaults = NSUserDefaults.standardUserDefaults();
     
@@ -43,9 +42,10 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     var refreshControl : UIRefreshControl!
     
-    let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Light)
+    let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
     
-    // let errorView = UILabel(frame: CGRect(x: 0, y: 20, width: 320, height: 40))
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,16 +62,11 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         collectionView.delegate  = self
         
         // loading begin (show)
-        
         HUD.textLabel.text = "Loading"
+        HUD.indicatorView = JGProgressHUDRingIndicatorView()
         HUD.showInView(self.view!)
 
         // Do any additional setup after loading the view.
-        
-        /*errorView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
-        errorView.textColor = UIColor.whiteColor()
-        errorView.font = UIFont.systemFontOfSize(12)
-        errorView.textAlignment = NSTextAlignment.Center*/
         loadData()
 
     }
@@ -81,18 +76,15 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func showNetworkErrorView(message: String) {
-//        errorView.text = message
-//        self.collectionView.layer.frame.origin.y = 60
-//        self.view!.addSubview(errorView)
-        self.HUD.dismiss()
+        self.HUD.indicatorView = JGProgressHUDImageIndicatorView(image: UIImage(named: "success"))
+        self.HUD.textLabel.text = "Success"
+        self.HUD.dismissAfterDelay(1.0)
     }
     
     func hideNetworkErrorView() {
-//        if (errorView.superview == self.view!) {
-//            errorView.removeFromSuperview()
-//        }
-//        self.collectionView.layer.frame.origin.y = 20
-        self.HUD.dismiss()
+        self.HUD.indicatorView = JGProgressHUDImageIndicatorView(image: UIImage(named: "success"))
+        self.HUD.textLabel.text = "Success"
+        self.HUD.dismissAfterDelay(1.0)
     }
     
     func loadData() {
@@ -138,6 +130,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func onRefresh() {
+        self.HUD.textLabel.text = "Loading"
+        self.HUD.indicatorView = JGProgressHUDRingIndicatorView()
+        self.HUD.showInView(self.view)
         self.loadData()
 
     }
@@ -156,6 +151,14 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         let movie = movies?[indexPath.item]
         let title = movie!["title"] as! String
+        
+        let year = movie!["release_date"] as! String
+        let rating = movie!["vote_average"] as! NSNumber
+        
+        cell.yearLabel.text = year.substringWithRange(Range<String.Index>(start: year.startIndex ,end: year.startIndex.advancedBy(4)))
+        let ratingDouble = rating.doubleValue
+        cell.ratingLabel.text = String(format: "%.1f", ratingDouble)
+        cell.ratingLabel.layer.cornerRadius = 50
         cell.movieTitleLabel.text = title
         
         let baseImageURL = "http://image.tmdb.org/t/p/w500"
@@ -182,9 +185,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        // let movieAsNSData = NSKeyedArchiver.archivedDataWithRootObject(movies![indexPath.row])
-        // defaults.setObject(movieAsNSData, forKey: "currentMovie")
-        // defaults.synchronize()
+
     }
 
     override func didReceiveMemoryWarning() {

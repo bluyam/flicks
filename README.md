@@ -65,7 +65,7 @@ The following **required** functionality is completed:
 
 - [x] User can view movie details by tapping on a cell.
 - [x] User can select from a tab bar for either **Now Playing** or **Top Rated** movies.
-- [ ] Customize the selection effect of the cell.
+- [x] Customize the selection effect of the cell.
 
 The following **optional** features are implemented:
 
@@ -74,24 +74,32 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [x] Customized tab bar (Upcoming/My Flicks)
+- [x] Detail View with movie poster, image, rating, reviews, genre, number of ratings, similar movies, and cast photos using collectionview
+- [x] Save your favorite movies to My Flicks, for easy access
+- [x] Click on similar (movies or movies in My Flicks) to see more details
+- [x] View YouTube trailer, if available
+- [x] Display placeholder for unavailable images
+- [x] Shorten scrollview if similar movies not available
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. TBD
-2. TBD
+1. Customizing the navigation bar - if I had more time, a search bar and a tab for movie/tv endpoints would replace the default navbar for the first three tabs.
+2. Facebook integration - I have worked with Facebook integration for webapps before, so I'm sure it would not be a far stretch to weave it into an application. Flicks might benefit from fb integration by enabling users to share their favorite movies, or see an activity feed containing movie-related statuses from their friends (or activity from within the app).
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/UfZlleT.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/jikYn3G.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
 Describe any challenges encountered while building the app.
+
+The biggest challenge for me was working with unreliable data. APIs often return unpredictable data (ex: Similar movies, reviews, and cast photos are not always available), and it was a new challenge for me to make my code dynamic enough to handle such cases.
 
 ## License
 

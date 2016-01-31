@@ -16,6 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        // For demo purposes
+        if defaults.objectForKey("myFlicks") != nil {
+            defaults.removeObjectForKey("myFlicks")
+        }
+        
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
@@ -24,21 +31,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         nowPlayingViewController.endpoint = "now_playing"
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
         nowPlayingNavigationController.tabBarItem.image = UIImage(named: "now_playing")
+        nowPlayingNavigationController.navigationBar.topItem?.title = "Now Playing"
         
         let topMoviesNavigationController =  storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let topMoviesViewController = topMoviesNavigationController.topViewController as! MoviesViewController
         topMoviesViewController.endpoint = "top_rated"
         topMoviesNavigationController.tabBarItem.title = "Top Rated"
         topMoviesNavigationController.tabBarItem.image = UIImage(named: "top_rated")
+        topMoviesNavigationController.navigationBar.topItem?.title = "Top Movies"
         
         let upcomingNavigationController =  storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let upcomingViewController = upcomingNavigationController.topViewController as! MoviesViewController
         upcomingViewController.endpoint = "upcoming"
         upcomingNavigationController.tabBarItem.title = "Upcoming"
         upcomingNavigationController.tabBarItem.image = UIImage(named: "upcoming")
+        upcomingNavigationController.navigationBar.topItem?.title = "Upcoming"
+        
+        let myFlicksNavigationController = storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
+        let myFlicksViewController = storyboard.instantiateViewControllerWithIdentifier("MyFlicksController")
+        myFlicksNavigationController.viewControllers = [myFlicksViewController]
+        myFlicksNavigationController.tabBarItem.title = "My Flicks"
+        myFlicksNavigationController.tabBarItem.image = UIImage(named: "list")
+        myFlicksNavigationController.navigationBar.topItem?.title = "My Flicks"
         
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [nowPlayingNavigationController, topMoviesNavigationController, upcomingNavigationController]
+        tabBarController.viewControllers = [nowPlayingNavigationController, topMoviesNavigationController, upcomingNavigationController, myFlicksNavigationController]
 
         tabBarController.tabBar.barTintColor = UIColor.blackColor()
         tabBarController.tabBar.tintColor = UIColor.whiteColor()

@@ -14,7 +14,7 @@
 //  Customize Cell Selection Effect []
 //
 //  Desired:
-//  Play trailer view [can do]
+//  Play trailer view [x]
 //  Display box office price, actors, rating, runtime in collection []
 //  Get tickets []
 //  Add to 'my movies' [can do]
@@ -30,25 +30,25 @@ import UIKit
 import AFNetworking
 import JGProgressHUD
 
-class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchResultsUpdating {
+class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    let endpoints = NSDictionary(objects: [["movies/now_playing","tv/on_the_air"],["movies/top_rated","tv/top_rated"],["movies/upcoming","tv/airing_today"]], forKeys: ["now_playing","top_rated","upcoming"])
     let defaults = NSUserDefaults.standardUserDefaults();
     
     @IBOutlet var collectionView: UICollectionView!
     
     var movies : [NSDictionary]?
-    
+    var genres : [NSDictionary]?
     var endpoint : String!
-    
     var refreshControl : UIRefreshControl!
     
     let HUD: JGProgressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // array of movie dictionaries
+        setObjectWithPersistance([NSDictionary](), key: "myFlicks")
         
         self.setNeedsStatusBarAppearanceUpdate()
         
@@ -61,28 +61,32 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         collectionView.dataSource = self
         collectionView.delegate  = self
         
-        // loading begin (show)
         HUD.textLabel.text = "Loading"
         HUD.showInView(self.view!)
 
-        // Do any additional setup after loading the view.
-        loadData()
+        loadAllData()
 
+    }
+    
+    func loadAllData() {
+        loadMovieData()
+        loadGenreData()
+        self.HUD.dismiss()
+        self.refreshControl.endRefreshing()
+        
+    }
+    
+    func setObjectWithPersistance(value: AnyObject?, key: String) {
+        if (defaults.objectForKey(key) == nil) {
+            defaults.setObject(value, forKey: key)
+        }
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
     
-    func showNetworkErrorView(message: String) {
-        self.HUD.dismiss()
-    }
-    
-    func hideNetworkErrorView() {
-        self.HUD.dismiss()
-    }
-    
-    func loadData() {
+    func loadMovieData() {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
@@ -98,8 +102,30 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                         data, options:[]) as? NSDictionary {
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.collectionView.reloadData()
-                            self.hideNetworkErrorView()
-                            self.refreshControl.endRefreshing()
+                    }
+                }
+                else {
+                    print ("A networking error occurred.")
+                }
+        });
+        task.resume()
+    }
+    
+    func loadGenreData() {
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = NSURL(string:"https://api.themoviedb.org/3/genre/movie/list?api_key=\(apiKey)")
+        let request = NSURLRequest(URL: url!)
+        let session = NSURLSession(
+            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+            delegate:nil,
+            delegateQueue:NSOperationQueue.mainQueue()
+        )
+        let task = session.dataTaskWithRequest(request,
+            completionHandler: { (dataOrNil, response, error) in
+                if let data = dataOrNil {
+                    if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
+                        data, options:[]) as? NSDictionary {
+                            self.genres = responseDictionary["genres"] as? [NSDictionary]
                     }
                 }
                 else {
@@ -111,9 +137,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func onRefresh() {
         self.HUD.textLabel.text = "Refreshing"
-        self.HUD.indicatorView = JGProgressHUDIndicatorView()
         self.HUD.showInView(self.view)
-        self.loadData()
+        self.loadAllData()
+        self.HUD.dismiss()
 
     }
     
@@ -130,7 +156,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         
         let movie = movies?[indexPath.item]
-        let title = movie!["title"] as! String
         
         let year = movie!["release_date"] as! String
         let rating = movie!["vote_average"] as! NSNumber
@@ -138,8 +163,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         cell.yearLabel.text = year.substringWithRange(Range<String.Index>(start: year.startIndex ,end: year.startIndex.advancedBy(4)))
         let ratingDouble = rating.doubleValue
         cell.ratingLabel.text = String(format: "%.1f", ratingDouble)
-        cell.ratingLabel.layer.cornerRadius = 50
-        cell.movieTitleLabel.text = title
         
         let baseImageURL = "http://image.tmdb.org/t/p/w500"
         
@@ -154,32 +177,40 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                     })
                 }
                 else {
-                    // default behavior
                     cell.posterImageView.image = image
                 }
                 }, failure: { (imageRequest, imageResponse, imageError) -> Void in
             })
         }
-        
         return cell
     }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        var genre: String?
         let cell = sender as! UICollectionViewCell
         let indexPath = collectionView.indexPathForCell(cell)
         let movie = movies![indexPath!.item]
+        let genreArray = movie["genre_ids"] as! NSArray
+        var genreId = NSNumber(int: 9648)
+        
+        if genreArray.count > 0 {
+            genreId = genreArray[0] as! NSNumber
+        }
+        
+        for genreDict in genres! {
+            if (genreDict["id"] as! NSNumber).integerValue == genreId.integerValue {
+                genre = genreDict["name"] as? String
+            }
+        }
         
         let movieViewController = segue.destinationViewController as! MovieViewController
-        movieViewController.movie = movie
+        movieViewController.movie = movie.mutableCopy() as! NSMutableDictionary
+        movieViewController.genre = genre
     }
 
 }

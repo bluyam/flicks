@@ -11,8 +11,6 @@ import UIKit
 class MovieCell: UICollectionViewCell {
 
     @IBOutlet var posterImageView: UIImageView!
-
-    @IBOutlet var movieTitleLabel: UILabel!
     
     @IBOutlet var yearLabel: UILabel!
     

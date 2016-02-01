@@ -57,7 +57,7 @@ Challenges: Dealing with Networking Errors (still need to improve), and formatti
 
 **Flicks** is a movies app displaying box office and top rental DVDs using [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **<1** hours spent in total
+Time spent: **21** hours spent in total
 
 ## User Stories
 
